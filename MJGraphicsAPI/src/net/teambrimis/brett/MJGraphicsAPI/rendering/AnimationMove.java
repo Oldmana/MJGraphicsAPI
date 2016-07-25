@@ -11,9 +11,9 @@ public class AnimationMove extends Animation
 	private int destX;
 	private int destY;
 	
-	public AnimationMove(MJComponent component, int interval, int maxStage, int destX, int destY)
+	public AnimationMove(MJComponent component, int interval, int destX, int destY)
 	{
-		super(component, interval, maxStage);
+		super(component, interval);
 		
 		startX = component.getX();
 		startY = component.getY();
@@ -35,8 +35,8 @@ public class AnimationMove extends Animation
 	@Override
 	public void tick()
 	{
-		getComponent().setScaledX(Scaling.scale(startX) + (int) Math.round(Scaling.scale(diffX()) * ((double) getStage() / (double) getMaxStage())));
-		getComponent().setScaledY(Scaling.scale(startY) + (int) Math.round(Scaling.scale(diffY()) * ((double) getStage() / (double) getMaxStage())));
+		getComponent().setScaledX(Scaling.scale(startX) + (int) Math.round(Scaling.scale(diffX()) * ((double) getState() / (double) getMax())));
+		getComponent().setScaledY(Scaling.scale(startY) + (int) Math.round(Scaling.scale(diffY()) * ((double) getState() / (double) getMax())));
 		getComponent().requestRepaint();
 	}
 	

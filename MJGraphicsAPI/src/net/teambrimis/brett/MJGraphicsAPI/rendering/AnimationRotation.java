@@ -6,13 +6,13 @@ public class AnimationRotation extends Animation
 {
 	public AnimationRotation(MJComponent component, int interval, int maxStage)
 	{
-		super(component, interval, maxStage);
+		super(component, interval);
 	}
 
 	@Override
 	public void tick()
 	{
-		getComponent().setRotation(360 * ((double) getStage() / (double) getMaxStage()));
+		getComponent().setRotation(360 * ((double) getState() / (double) getMax()));
 		getComponent().requestRepaint();
 	}
 

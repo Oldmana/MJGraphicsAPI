@@ -6,24 +6,45 @@ public abstract class Animation
 {
 	private MJComponent component;
 	
-	private String name; // [MJ-1]
+	private int ID;
 	
 	private int interval;
-	private int maxStage;
 	
 	private long startTime;
-	private int stage = 0;
+	private long lastTime;
 	
 	private boolean stopped = false;
 	
-	public Animation(MJComponent component, int interval, int maxStage)
+	private int min = 0;
+	private int max = 20;
+	private int subtraction = 1;
+	private int addition = 1;
+	
+	private int state = min;
+	
+	/**
+	 * 
+	 * @param component - Component being animated
+	 * @param interval - In milliseconds
+	 */
+	public Animation(MJComponent component, int interval)
 	{
 		this.component = component;
 		
 		this.interval = interval;
-		this.maxStage = maxStage;
 		
 		startTime = System.currentTimeMillis();
+		lastTime = startTime;
+	}
+	
+	public boolean shouldTick()
+	{
+		if (interval + lastTime <= System.currentTimeMillis())
+		{
+			lastTime += interval;
+			return true;
+		}
+		return false;
 	}
 	
 	public MJComponent getComponent()
@@ -32,14 +53,14 @@ public abstract class Animation
 	}
 	
 	// [MJ-1]
-	public String getName()
+	public int getID()
 	{
-		return name;
+		return ID;
 	}
 	
-	public void setName(String name)
+	public void setID(int ID)
 	{
-		this.name = name;
+		this.ID = ID;
 	}
 	// End
 	
@@ -48,35 +69,9 @@ public abstract class Animation
 		return interval;
 	}
 	
-	public int getMaxStage()
-	{
-		return maxStage;
-	}
-	
 	public long getStartTime()
 	{
 		return startTime;
-	}
-	
-	public int getStage()
-	{
-		return stage;
-	}
-	
-	public void incrementStage(int amount)
-	{
-		stage += amount;
-	}
-	
-	public void decrementStage(int amount)
-	{
-		stage -= amount;
-	}
-	
-	public synchronized void modify(int newStage, int newMaxStage)
-	{
-		stage = newStage;
-		maxStage = newMaxStage;
 	}
 	
 	public void stop()
@@ -89,7 +84,67 @@ public abstract class Animation
 		return stopped;
 	}
 	
+	public int getMin()
+	{
+		return min;
+	}
+	
+	public void setMin(int min)
+	{
+		this.min = min;
+	}
+	
+	public int getMax()
+	{
+		return max;
+	}
+	
+	public void setMax(int max)
+	{
+		this.max = max;
+	}
+	
+	public void setChange(int change)
+	{
+		subtraction = change;
+		addition = change;
+	}
+	
+	public int getSubtraction()
+	{
+		return subtraction;
+	}
+	
+	public void setSubtraction(int subtraction)
+	{
+		this.subtraction = subtraction;
+	}
+	
+	public int getAddition()
+	{
+		return addition;
+	}
+	
+	public void setAddition(int addition)
+	{
+		this.addition = addition;
+	}
+	
+	public int getState()
+	{
+		return state;
+	}
+	
+	public void setState(int state)
+	{
+		this.state = state;
+	}
+	
 	public abstract void tick();
 	
 	public void complete() {}
+	
+	// ID List
+	public static int ID_HOVER = 0;
+	public static int ID_PROGRESS_BAR = 1;
 }

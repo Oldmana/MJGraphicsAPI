@@ -16,8 +16,6 @@ public class RenderManager
 	
 	private RenderingThread[] renderers;
 	
-	private AnimationThread animator;
-	
 	private volatile boolean renderingFrame = false;
 	private volatile boolean renderQueued = false;
 	
@@ -32,7 +30,6 @@ public class RenderManager
 		{
 			renderers[i] = new RenderingThread("Rendering Thread #" + (i + 1));
 		}
-		animator = new AnimationThread("Animation Thread");
 	}
 	
 	public synchronized void addComponent(int layer, MJComponent task)
@@ -110,9 +107,9 @@ public class RenderManager
 		}
 	}
 	
-	public synchronized void animate(Animation a)
+	public synchronized void registerAnimation(Animation a)
 	{
-		animator.add(a);
+		renderers[0].animations.add(a);
 	}
 	
 	private int getBestRenderingThread()

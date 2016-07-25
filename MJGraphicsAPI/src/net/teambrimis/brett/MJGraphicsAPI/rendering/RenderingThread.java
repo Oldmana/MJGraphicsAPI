@@ -14,6 +14,8 @@ public class RenderingThread extends Thread
 {
 	private ConcurrentLinkedQueue<RenderingTask> tasks = new ConcurrentLinkedQueue<RenderingTask>();
 	
+	protected List<Animation> animations = new ArrayList<Animation>();
+	
 	private volatile boolean rendering = false;
 	
 	public RenderingThread(String name)
@@ -66,31 +68,11 @@ public class RenderingThread extends Thread
 			
 			// Testing: Animations running on rendering thread
 			List<Animation> removals = new ArrayList<Animation>();
-			for (Animation a : AnimationThread.animations)
+			for (Animation a : animations)
 			{
-				if (System.currentTimeMillis() > a.getStartTime() + ((a.getInterval() - 1) * a.getStage()))
+				if (a.shouldTick())
 				{
 					a.tick();
-					if (a.isStopped())
-					{
-						removals.add(a);
-					}
-					else if (a.getMaxStage() > 0)
-					{
-						if (a.getStage() >= a.getMaxStage())
-						{
-							removals.add(a);
-						}
-						else
-						{
-							a.incrementStage((int) (System.currentTimeMillis() - Math.ceil((double) (a.getStartTime() + ((a.getInterval() - 1)) * (double) a.getStage()))) / a.getInterval());
-						}
-					}
-					else
-					{
-						//a.incrementStage((int) (System.currentTimeMillis() - Math.ceil((double) (a.getStartTime() + ((a.getInterval() - 1)) * (double) a.getStage()))) / a.getInterval());
-						a.incrementStage(1);
-					}
 				}
 			}
 			
@@ -99,7 +81,7 @@ public class RenderingThread extends Thread
 			{
 				a.stop();
 				a.getComponent().removeAnimation(a);
-				AnimationThread.animations.remove(a);
+				animations.remove(a);
 				a.complete();
 			}
 			

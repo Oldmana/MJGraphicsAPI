@@ -19,9 +19,8 @@ import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseMoveListener
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.KeyEvent;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent;
 import net.teambrimis.brett.MJGraphicsAPI.components.props.ButtonColors;
-import net.teambrimis.brett.MJGraphicsAPI.components.props.Fadable;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.Animation;
-import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationFade;
+import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationHover;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.RenderingTask;
 import net.teambrimis.brett.MJGraphicsAPI.utils.GraphicsUtils;
 import net.teambrimis.brett.MJGraphicsAPI.utils.Scaling;
@@ -35,44 +34,6 @@ public class MJButton extends MJComponent
 	
 	private ButtonColors colors = new ButtonColors();
 	
-	private Animation hoverAnim = new Animation(this, 100, 0)
-	{
-		@Override
-		public void tick()
-		{
-			if (isMouseHovering())
-			{
-				if (stage < maxStage)
-				{
-					stage++;
-				}
-				else
-				{
-					removeAnimation(this);
-				}
-			}
-			else
-			{
-				if (stage > 0)
-				{
-					stage--;
-				}
-				else
-				{
-					removeAnimation(this);
-				}
-			}
-		}
-	};
-	
-	private void hoverAnimation(boolean hover) // TODO: Fix Hover
-	{
-		if (this.hasAnimation(hoverAnim))
-		{
-			addAnimation(hoverAnim);
-		}
-	}
-	
 	private MouseMoveListener MML = new MouseMoveListener()
 	{
 		@Override
@@ -81,7 +42,6 @@ public class MJButton extends MJComponent
 			System.out.println("Entered");
 			if (isEnabled())
 			{
-				hoverAnimation(true);
 				requestRepaint();
 			}
 		}
@@ -92,7 +52,6 @@ public class MJButton extends MJComponent
 			System.out.println("Exited");
 			if (isEnabled())
 			{
-				hoverAnimation(true);
 				requestRepaint();
 			}
 		}
@@ -140,6 +99,10 @@ public class MJButton extends MJComponent
 		registerListener(FCL);
 	}
 	
+	private AnimationHover hoverAnim = new AnimationHover(this, 100);
+	{
+		hoverAnim.setMax(10);
+	}
 	public MJButton(MJGraphicsWindow window, int x, int y, int width, int height, int layer, String text)
 	{
 		super(window, x, y, width, height, layer);
@@ -176,13 +139,13 @@ public class MJButton extends MJComponent
 		//else
 		{
 		//System.out.println(getX() + " " + getY());
-		g.setColor(colors.getCurrentColor(isEnabled(), stage, maxStage));
+		g.setColor(colors.getCurrentColor(isEnabled(), hoverAnim.getState(), hoverAnim.getMax()));
 		g.fillRect(0, 0, getScaledWidth(), getScaledHeight());
-		g.setColor(colors.getCurrentBorderColor(isEnabled(), stage, maxStage));
+		g.setColor(colors.getCurrentBorderColor(isEnabled(), hoverAnim.getState(), hoverAnim.getMax()));
 		g.drawRect(0, 0, getScaledWidth() - 1, getScaledHeight() - 1);
 		if (isPrimeFocused())
 		{
-			g.setColor(new Color(0, 0, 255 - (stage * 10)));
+			g.setColor(new Color(0, 0, 255 - (hoverAnim.getState() * 10)));
 			g.fillRect(getScaledWidth() / 4, getScaledHeight() / 4, getScaledWidth() / 2, getScaledHeight() / 2);
 			g.setColor(Color.RED);
 			g.setFont(Scaling.getFont(Font.PLAIN, 8));
@@ -210,6 +173,11 @@ public class MJButton extends MJComponent
 	public void componentAdded()
 	{
 		super.componentAdded();
+		
+		hoverAnim = new AnimationHover(this, 100);
+		hoverAnim.setMax(10);
+		addAnimation(hoverAnim);
+		
 		Timer timer = new Timer(1, new ActionListener()
 		{
 			@Override

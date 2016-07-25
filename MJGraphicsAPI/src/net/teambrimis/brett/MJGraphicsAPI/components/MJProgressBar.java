@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import net.teambrimis.brett.MJGraphicsAPI.MJGraphicsWindow;
-import net.teambrimis.brett.MJGraphicsAPI.components.props.Progressable;
-import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationProgress;
+import net.teambrimis.brett.MJGraphicsAPI.rendering.Animation;
+import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationProgressBar;
 
-public class MJProgressBar extends MJComponent implements Progressable
+public class MJProgressBar extends MJComponent
 {
 	private int min;
 	private int max;
@@ -36,13 +36,28 @@ public class MJProgressBar extends MJComponent implements Progressable
 		return max;
 	}
 	
+	public int getValue()
+	{
+		return value;
+	}
+	
 	public void setValue(int v)
 	{
 		value = v;
-		if (!hasAnimation(AnimationProgress.class))
+		if (!hasAnimation(Animation.ID_PROGRESS_BAR))
 		{
-			addAnimation(new AnimationProgress(this, 50, 0));
+			addAnimation(new AnimationProgressBar(this, 50));
 		}
+	}
+	
+	public int getVisibleValue()
+	{
+		return visibleValue;
+	}
+	
+	public void setVisibleValue(int value)
+	{
+		visibleValue = value;
 	}
 	
 	@Override
@@ -52,15 +67,5 @@ public class MJProgressBar extends MJComponent implements Progressable
 		g.fillRect(1, 1, (int) Math.ceil((getScaledWidth() - 2) * ((double) (visibleValue - min) / (max - min))), getScaledHeight() - 2);
 		g.setColor(Color.BLACK);
 		g.drawRect(0, 0, getScaledWidth() - 1, getScaledHeight() - 1);
-	}
-
-	@Override
-	public void progress()
-	{
-		visibleValue = visibleValue + (int) Math.ceil(((double) value - visibleValue) / 4);
-		if (value == visibleValue)
-		{
-			removeAnimation(AnimationProgress.class);
-		}
 	}
 }

@@ -19,7 +19,6 @@ import net.teambrimis.brett.MJGraphicsAPI.components.MJTextBox;
 import net.teambrimis.brett.MJGraphicsAPI.components.PolygonOutline;
 import net.teambrimis.brett.MJGraphicsAPI.components.painters.TextPainter;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationMove;
-import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationProgress;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationRotation;
 import net.teambrimis.brett.MJGraphicsAPI.utils.GraphicsUtils;
 import net.teambrimis.brett.MJGraphicsAPI.utils.Scaling;
@@ -83,7 +82,7 @@ public class Main
 				//MJTextBox box = new MJTextBox(window, 10, 10, 20, 20, 2);
 				//window.addComponent(box);
 				
-				AnimationMove an = new AnimationMove(b, 10, 400, 20, 30);
+				AnimationMove an = new AnimationMove(b, 10, 20, 30);
 				AnimationRotation a = new AnimationRotation(b, 25, 200);
 				b.addAnimation(an);
 				b.addAnimation(a);

@@ -14,7 +14,6 @@ import java.util.Map;
 import net.teambrimis.brett.MJGraphicsAPI.MJGraphicsWindow;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.Listener;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.Animation;
-import net.teambrimis.brett.MJGraphicsAPI.rendering.AnimationFade;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.PaintHandler;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.RenderingTask;
 import net.teambrimis.brett.MJGraphicsAPI.utils.GraphicsUtils;
@@ -191,14 +190,8 @@ public abstract class MJComponent extends RenderingTask
 	
 	public void addAnimation(Animation a)
 	{
-		/** Removal by [MJ-1]
-		if (hasAnimation(a.getClass()))
-		{
-			return;
-		}
-		**/
 		animations.add(a);
-		window.getRenderManager().animate(a);
+		window.getRenderManager().registerAnimation(a);
 	}
 	
 	public void removeAnimation(Animation a)
@@ -210,16 +203,16 @@ public abstract class MJComponent extends RenderingTask
 		}
 	}
 	
-	public void removeAnimation(Class<? extends Animation> c)
+	public void removeAnimationByID(int ID)
 	{
-		removeAnimation(getAnimationByClass(c));
+		animations.remove(getAnimationByID(ID));
 	}
 	
-	public Animation getAnimationByClass(Class<? extends Animation> cl)
+	public Animation getAnimationByID(int ID)
 	{
 		for (Animation a : animations)
 		{
-			if (a.getClass() == cl)
+			if (a.getID() == ID)
 			{
 				return a;
 			}
@@ -227,11 +220,11 @@ public abstract class MJComponent extends RenderingTask
 		return null;
 	}
 	
-	public boolean hasAnimation(Class<? extends Animation> c)
+	public boolean hasAnimation(int ID)
 	{
 		for (Animation a : animations)
 		{
-			if (a.getClass() == c)
+			if (a.getID() == ID)
 			{
 				return true;
 			}
@@ -464,27 +457,6 @@ public abstract class MJComponent extends RenderingTask
 	public boolean isMouseHovering()
 	{
 		return window.getHovered() == this;
-	}
-	
-	public boolean isFading()
-	{
-		if (getFade() != null)
-		{
-			return true;
-		}
-		return false;
-	}
-	
-	public AnimationFade getFade()
-	{
-		for (Animation a : animations)
-		{
-			if (a instanceof AnimationFade)
-			{
-				return (AnimationFade) a;
-			}
-		}
-		return null;
 	}
 	
 	/**Checks if this component or a subcomponent has prime focus.
