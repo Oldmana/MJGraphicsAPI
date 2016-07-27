@@ -15,8 +15,11 @@ public class AnimationProgressBar extends Animation
 	public void tick()
 	{
 		MJProgressBar bar = (MJProgressBar) getComponent();
-		bar.setVisibleValue(bar.getVisibleValue() + (int) Math.ceil(((double) bar.getValue() - bar.getVisibleValue()) / 4));
-		bar.requestRepaint();
+		if (bar.getValue() != bar.getVisibleValue())
+		{
+			bar.setVisibleValue(bar.getVisibleValue() + (int) Math.ceil(((double) bar.getValue() - bar.getVisibleValue()) / 4));
+			bar.requestRepaint();
+		}
 	}
 
 }

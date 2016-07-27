@@ -74,6 +74,10 @@ public class RenderingThread extends Thread
 				{
 					a.tick();
 				}
+				if (a.isStopped())
+				{
+					removals.add(a);
+				}
 			}
 			
 			

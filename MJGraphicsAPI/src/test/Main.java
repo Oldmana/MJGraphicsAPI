@@ -86,6 +86,8 @@ public class Main
 				AnimationRotation a = new AnimationRotation(b, 25, 200);
 				b.addAnimation(an);
 				b.addAnimation(a);
+				an.setMax(200);
+				a.setMax(80);
 				//window.getRenderManager().animate(a);
 				//window.getRenderManager().animate(an);
 				window.addComponent(c);

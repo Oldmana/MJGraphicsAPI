@@ -35,9 +35,14 @@ public class AnimationMove extends Animation
 	@Override
 	public void tick()
 	{
+		setState(Math.min(getMax(), getState() + 1));
 		getComponent().setScaledX(Scaling.scale(startX) + (int) Math.round(Scaling.scale(diffX()) * ((double) getState() / (double) getMax())));
 		getComponent().setScaledY(Scaling.scale(startY) + (int) Math.round(Scaling.scale(diffY()) * ((double) getState() / (double) getMax())));
 		getComponent().requestRepaint();
+		if (getState() == getMax())
+		{
+			getComponent().removeAnimation(this);
+		}
 	}
 	
 	@Override
