@@ -28,6 +28,7 @@ import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseClickListene
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseDragListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseMoveListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MousePressListener;
+import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseWheelListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent.MouseButton;
 import net.teambrimis.brett.MJGraphicsAPI.utils.Scaling;
 
@@ -217,13 +218,22 @@ public class MJFrame extends JFrame
 				}
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent event)
 			{
-				
+				MJComponent c = getEnabledPanel().getComponentAt(event.getX(), event.getY());
+				if (c != null)
+				{
+					for (MouseWheelListener l : (List<MouseWheelListener>) c.getListeners(MouseWheelListener.EVENT_ID))
+					{
+						l.onMouseWheel(new net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent(event.getX(), event.getY(), net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent.WheelDirection.DOWN));
+					}
+				}
 			}
 		};
 		canvas.addMouseListener(listener);
+		canvas.addMouseWheelListener(listener);
 		canvas.addMouseMotionListener(listener);
 		
 		canvas.addKeyListener(new KeyAdapter()

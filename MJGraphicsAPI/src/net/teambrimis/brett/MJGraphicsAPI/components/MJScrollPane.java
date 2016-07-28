@@ -7,7 +7,9 @@ import java.awt.image.BufferedImage;
 
 import net.teambrimis.brett.MJGraphicsAPI.MJGraphicsWindow;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseClickListener;
+import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseWheelListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent;
+import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.PaintHandler;
 import net.teambrimis.brett.MJGraphicsAPI.utils.Scaling;
 
@@ -49,8 +51,19 @@ public class MJScrollPane extends MJComponent
 		}
 	};
 	
+	private MouseWheelListener MWL = new MouseWheelListener()
+	{
+		@Override
+		public void onMouseWheel(MouseWheelEvent event)
+		{
+			yScroll = Math.min(getXRange(), yScroll + 1);
+			requestRepaint();
+		}
+	};
+	
 	{
 		this.registerListener(MCL);
+		this.registerListener(MWL);
 	}
 	
 	public MJScrollPane(MJGraphicsWindow window, int x, int y, int width, int height, int layer)
