@@ -9,6 +9,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import net.teambrimis.brett.MJGraphicsAPI.components.listeners.KeyPressListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.KeyReleaseListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.Listener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseClickListener;
+import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseDragListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseMoveListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MousePressListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent.MouseButton;
@@ -43,6 +45,8 @@ public class MJFrame extends JFrame
 	
 	private MJComponent hovered;
 	private MJComponent focused;
+	
+	private MJComponent lastPressed;
 	
 	private boolean shifting = false;
 	
@@ -95,6 +99,11 @@ public class MJFrame extends JFrame
 						l.onMousePress(new net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent(event.getX(), event.getY(), button));
 					}
 					//((MousePressListener) c).onMousePress(new net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent(event.getX(), event.getY()));
+					lastPressed = c;
+				}
+				else
+				{
+					lastPressed = null;
 				}
 			}
 			
@@ -119,7 +128,7 @@ public class MJFrame extends JFrame
 				}
 				if (c != null)
 				{
-					MouseButton button = null;
+					MouseButton button = MouseButton.LEFT;
 					if (event.getButton() == MouseEvent.BUTTON1)
 					{
 						button = MouseButton.LEFT;
@@ -180,6 +189,38 @@ public class MJFrame extends JFrame
 					}
 					hovered = c;
 				}
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public void mouseDragged(MouseEvent event)
+			{
+				if (lastPressed != null)
+				{
+					MouseButton button = MouseButton.LEFT;
+					if (event.getButton() == MouseEvent.BUTTON1)
+					{
+						button = MouseButton.LEFT;
+					}
+					else if (event.getButton() == MouseEvent.BUTTON2)
+					{
+						button = MouseButton.MIDDLE;
+					}
+					else if (event.getButton() == MouseEvent.BUTTON3)
+					{
+						button = MouseButton.RIGHT;
+					}
+					for (MouseDragListener l : (List<MouseDragListener>) lastPressed.getListeners(MouseDragListener.EVENT_ID))
+					{
+						l.onMouseDrag(new net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent(event.getX(), event.getY(), button));
+					}
+				}
+			}
+			
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent event)
+			{
+				
 			}
 		};
 		canvas.addMouseListener(listener);

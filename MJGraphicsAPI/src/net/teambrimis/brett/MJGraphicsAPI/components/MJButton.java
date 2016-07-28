@@ -15,6 +15,7 @@ import net.teambrimis.brett.MJGraphicsAPI.MJGraphicsWindow;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.FocusChangeListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.KeyReleaseListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseClickListener;
+import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseDragListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseMoveListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.KeyEvent;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent;
@@ -28,9 +29,6 @@ import net.teambrimis.brett.MJGraphicsAPI.utils.Scaling;
 public class MJButton extends MJComponent
 {
 	private String text;
-	
-	private int stage = 0;
-	private int maxStage = 10;
 	
 	private ButtonColors colors = new ButtonColors();
 	
@@ -91,12 +89,25 @@ public class MJButton extends MJComponent
 		}
 	};
 	
+	private MouseDragListener MDL = new MouseDragListener()
+	{
+		@Override
+		public void onMouseDrag(MouseEvent event)
+		{
+			setScaledX(event.getX());
+			setScaledY(event.getY());
+			requestRepaint();
+		}
+	};
+	
 	{
 		registerListener(MML);
 		registerListener(MCL);
 		registerListener(KRL);
 		
 		registerListener(FCL);
+		
+		registerListener(MDL);
 	}
 	
 	private AnimationHover hoverAnim = new AnimationHover(this, 100);
