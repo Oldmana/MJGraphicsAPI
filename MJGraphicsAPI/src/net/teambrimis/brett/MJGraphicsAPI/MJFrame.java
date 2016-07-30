@@ -225,9 +225,18 @@ public class MJFrame extends JFrame
 				MJComponent c = getEnabledPanel().getComponentAt(event.getX(), event.getY());
 				if (c != null)
 				{
-					for (MouseWheelListener l : (List<MouseWheelListener>) c.getListeners(MouseWheelListener.EVENT_ID))
+					while (c != null && (!c.isVisibleToEvents() || c.getListeners(MouseWheelListener.EVENT_ID).isEmpty()))
 					{
-						l.onMouseWheel(new net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent(event.getX(), event.getY(), net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent.WheelDirection.DOWN));
+						c = c.getSupercomponent();
+					}
+					if (c != null)
+					{
+						for (MouseWheelListener l : (List<MouseWheelListener>) c.getListeners(MouseWheelListener.EVENT_ID))
+						{
+							l.onMouseWheel(new net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent(event.getX(), event.getY(), 
+								event.getUnitsToScroll() > 0 ? net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent.WheelDirection.DOWN : 
+									net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent.WheelDirection.UP));
+						}
 					}
 				}
 			}

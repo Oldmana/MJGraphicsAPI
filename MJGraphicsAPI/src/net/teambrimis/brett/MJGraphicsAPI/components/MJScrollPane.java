@@ -10,6 +10,7 @@ import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseClickListene
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.MouseWheelListener;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseEvent;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent;
+import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.MouseWheelEvent.WheelDirection;
 import net.teambrimis.brett.MJGraphicsAPI.rendering.PaintHandler;
 import net.teambrimis.brett.MJGraphicsAPI.utils.Scaling;
 
@@ -56,7 +57,14 @@ public class MJScrollPane extends MJComponent
 		@Override
 		public void onMouseWheel(MouseWheelEvent event)
 		{
-			yScroll = Math.min(getXRange(), yScroll + 1);
+			if (event.getDirection() == WheelDirection.DOWN)
+			{
+				yScroll = Math.min(getXRange(), yScroll + 1);
+			}
+			else
+			{
+				yScroll = Math.max(0, yScroll - 1);
+			}
 			requestRepaint();
 		}
 	};
