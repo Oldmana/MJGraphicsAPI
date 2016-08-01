@@ -12,12 +12,14 @@ import net.teambrimis.brett.MJGraphicsAPI.components.listeners.KeyReleaseListene
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.KeyEvent;
 import net.teambrimis.brett.MJGraphicsAPI.components.listeners.events.KeyEvent.Keys;
 import net.teambrimis.brett.MJGraphicsAPI.components.painters.TextPainter;
+import net.teambrimis.brett.MJGraphicsAPI.rendering.Animation;
 import net.teambrimis.brett.MJGraphicsAPI.utils.Scaling;
 
 public class MJTextBox extends MJComponent
 {
 	private String text = "";
 	private int pos = 0;
+	private boolean blinkOn = false;
 	
 	private int minBound;
 	private int maxBound;
@@ -60,8 +62,19 @@ public class MJTextBox extends MJComponent
 		}
 	};
 	
+	private Animation blink = new Animation(this, 500)
+	{
+		@Override
+		public void tick()
+		{
+			blinkOn = !blinkOn;
+		}
+		
+	};
+	
 	{
 		registerListener(KRL);
+		addAnimation(blink);
 	}
 	
 	public MJTextBox(MJGraphicsWindow window, int x, int y, int width, int height, int layer)
@@ -79,6 +92,7 @@ public class MJTextBox extends MJComponent
 		List<String> l = new ArrayList<String>();
 		l.add(text);
 		TextPainter tp = new TextPainter(l, Scaling.getFont(Font.PLAIN, 2), new Rectangle(0, 0, getScaledWidth(), getScaledHeight()), true, true);
+		
 		tp.paint(g);
 	}
 }

@@ -1,6 +1,8 @@
 package net.teambrimis.brett.MJGraphicsAPI.utils;
 
 import java.awt.Canvas;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
@@ -21,6 +23,11 @@ public class GraphicsUtils
 	public static GraphicsConfiguration getGraphicsConfiguration()
 	{
 		return canvas.getGraphicsConfiguration();
+	}
+	
+	public static FontMetrics getFontMetrics(Font font)
+	{
+		return canvas.getFontMetrics(font);
 	}
 	
 	public static BufferedImage getImage(int width, int height)
