@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.teambrimis.brett.MJGraphicsAPI.utils.GraphicsUtils;
+
 public class TextPainter extends Painter
 {
 	private List<String> text;
@@ -116,10 +118,6 @@ public class TextPainter extends Painter
 							line = "" + c;
 						}
 					}
-					else
-					{
-						
-					}
 				}
 				if (!line.equals(""))
 				{
@@ -157,7 +155,59 @@ public class TextPainter extends Painter
 		}
 		else
 		{
-			
+			int verticalAddition = 0;
+			if (vertical == Alignment.CENTER)
+			{
+				verticalAddition = ((int) bounds.getHeight()) / 2;
+			}
+			else if (vertical == Alignment.BOTTOM)
+			{
+				verticalAddition = (int) bounds.getHeight();
+			}
+			int horizontalAddition = 0;
+			if (horizontal == Alignment.CENTER)
+			{
+				horizontalAddition = ((int) bounds.getWidth()) / 2;
+			}
+			else if (horizontal == Alignment.RIGHT)
+			{
+				horizontalAddition = (int) bounds.getWidth();
+			}
+			g.drawString(text.get(0), horizontalAddition, verticalAddition + m.getAscent());
+		}
+	}
+	
+	public static class TextMeasurement
+	{
+		private FontMetrics m;
+		
+		public TextMeasurement(Font font)
+		{
+			m = GraphicsUtils.getFontMetrics(font);
+		}
+		
+		public int getWidth(String text)
+		{
+			return m.stringWidth(text);
+		}
+		
+		public int getHeight()
+		{
+			return m.getHeight();
+		}
+		
+		public String getHorizontalVisibleText(String text, int availableWidth, int pos)
+		{
+			StringBuilder sb = new StringBuilder(text);
+			if (getWidth(text.substring(0, pos)) > availableWidth)
+			{
+				sb = new StringBuilder(sb.substring(0, pos));
+				while (getWidth(sb.toString()) > availableWidth)
+				{
+					sb.deleteCharAt(0);
+				}
+			}
+			return sb.toString();
 		}
 	}
 	

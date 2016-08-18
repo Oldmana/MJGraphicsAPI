@@ -79,7 +79,7 @@ public class Main
 				//MJTest test = new MJTest(window, 5, 5, 45, 45, 2);
 				//window.addComponent(test);
 				
-				MJTextBox box = new MJTextBox(window, 10, 10, 20, 20, 2);
+				MJTextBox box = new MJTextBox(window, 10, 10, 20, 2, 2);
 				window.addComponent(box);
 				
 				AnimationMove an = new AnimationMove(b, 10, 20, 30);
