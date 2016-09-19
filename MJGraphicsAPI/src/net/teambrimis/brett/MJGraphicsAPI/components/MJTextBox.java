@@ -22,9 +22,6 @@ public class MJTextBox extends MJComponent
 	private int pos = 0;
 	private boolean blinkOn = false;
 	
-	private int minBound;
-	private int maxBound;
-	
 	private KeyReleaseListener KRL = new KeyReleaseListener()
 	{
 		@Override
@@ -40,7 +37,6 @@ public class MJTextBox extends MJComponent
 				if (pos > 0)
 				{
 					pos--;
-					blinkOn = true;
 				}
 			}
 			else if (event.getKey() == Keys.VK_RIGHT)
@@ -48,7 +44,6 @@ public class MJTextBox extends MJComponent
 				if (pos < text.length())
 				{
 					pos++;
-					blinkOn = true;
 				}
 			}
 			else if (event.hasTypedChar())
@@ -61,6 +56,7 @@ public class MJTextBox extends MJComponent
 			{
 				
 			}
+			blinkOn = true;
 			requestRepaint();
 		}
 	};
@@ -73,7 +69,6 @@ public class MJTextBox extends MJComponent
 			blinkOn = !blinkOn;
 			requestRepaint();
 		}
-		
 	};
 	
 	{

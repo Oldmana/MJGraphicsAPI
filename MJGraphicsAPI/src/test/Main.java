@@ -44,7 +44,6 @@ public class Main
 						g.fillRect(0, 0, 12 + stage, 46);
 						g.setColor(new Color(Math.max(0, 255 - stage), 0, 0, Math.max(0, 255 - stage)));
 						g.fillRect(0, 46, 12 + stage, stage);
-						window.requestRepaint();
 					}
 					
 					
